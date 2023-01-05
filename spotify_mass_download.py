@@ -153,14 +153,17 @@ def download_all_categories_playlists(download_meta_data_only=True):
     random.shuffle(category_ids)
     for category_index, category_id in enumerate(category_ids):
         console.log(f'Scraping playlists from category {category_id} ({category_index + 1}/{len(category_ids)})')
-        playlist_ids = scraper.get_category_playlist_ids(category_id)
-        for playlist_index, playlist_id in enumerate(playlist_ids):
-            console.log(f'Scraping playlist data from playlist {playlist_id} ({playlist_index + 1}/{len(playlist_ids)}) from category {category_id} ({category_index + 1}/{len(category_ids)})')
-            try:
-                playlist = scraper.get_playlist(playlist_id)
-                with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{playlist.spotify_id}.playlist', 'w') as f:
-                    f.write(playlist.export())
-                if not download_meta_data_only:
-                    full_download(f'{DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href)
-            except Exception as ex:
-                console.error(f'Scraping categories exception: {ex}')
+        try:
+            playlist_ids = scraper.get_category_playlist_ids(category_id)
+            for playlist_index, playlist_id in enumerate(playlist_ids):
+                console.log(f'Scraping playlist data from playlist {playlist_id} ({playlist_index + 1}/{len(playlist_ids)}) from category {category_id} ({category_index + 1}/{len(category_ids)})')
+                try:
+                    playlist = scraper.get_playlist(playlist_id)
+                    with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{playlist.spotify_id}.playlist', 'w') as f:
+                        f.write(playlist.export())
+                    if not download_meta_data_only:
+                        full_download(f'{DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href)
+                except Exception as ex:
+                    console.error(f'Scraping categories exception: {ex}')
+        except Exception as ex:
+                    console.error(f'Scraping categories exception: {ex}')
