@@ -1,3 +1,5 @@
 cryptography
 py-deezer
 flask
+lxml
+eyed3
