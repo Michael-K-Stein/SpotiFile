@@ -220,6 +220,10 @@ class SpotifyPlaylist:
             'track_ids': [track.spotify_id for track in self.tracks]
             }
         return json.dumps(data)
+    
+    def export_to_file(self) -> None:
+        with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{self.spotify_id}.playlist', 'w') as f:
+            f.write(self.export())
 
     @property
     def href(self):
