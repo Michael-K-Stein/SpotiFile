@@ -14,7 +14,7 @@ This allows SpotiFile to download information en-masse quickly.
 
 ## Why?
 Downloading massive amounts of songs and meta data can help if you prefer listening to music offline, or if you are desgining a music server which runs on an airgapped network.
-*We do not encourage music piracy or condone any illegal activity. SpotiFile is a usefull research tool. Usage of SpotiFile for other purposes is at the user's own risk.*
+*We do not encourage music piracy nor condone any illegal activity. SpotiFile is a usefull research tool. Usage of SpotiFile for other purposes is at the user's own risk.*
 
 ---
 
