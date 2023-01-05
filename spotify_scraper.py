@@ -143,6 +143,8 @@ class SpotifyScraper:
             category_playlists_json = self.get_category_playlists(category_id, limit=50, offset=current_offset)
             has_next = category_playlists_json['playlists']['next'] is not None
             for playlist in category_playlists_json['playlists']['items']:
+                if not playlist:
+                    continue
                 playlist_ids.append(playlist['id'])
         return playlist_ids
 
