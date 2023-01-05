@@ -159,8 +159,7 @@ def download_all_categories_playlists(download_meta_data_only=True):
                 console.log(f'Scraping playlist data from playlist {playlist_id} ({playlist_index + 1}/{len(playlist_ids)}) from category {category_id} ({category_index + 1}/{len(category_ids)})')
                 try:
                     playlist = scraper.get_playlist(playlist_id)
-                    with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{playlist.spotify_id}.playlist', 'w') as f:
-                        f.write(playlist.export())
+                    playlist.export_to_file()
                     if not download_meta_data_only:
                         full_download(f'{DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href)
                 except Exception as ex:

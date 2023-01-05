@@ -60,7 +60,11 @@ class SpotifyScraper:
             tracks += playlist_data['items']
         if len(tracks) != int(playlist_data['total']):
             print(f'Warning: track count does not match! {len(tracks)} != {int(playlist_data["tracks"]["total"])}')
-        return [SpotifyTrack(track_data) for track_data in tracks]
+        spotify_tracks = [SpotifyTrack(track_data) for track_data in tracks]
+        if AUTO_DOWNLOAD_PLAYLIST_METADATA:
+            playlist = SpotifyPlaylist(playlist_id, spotify_tracks, self.get_playlist_data(playlist_id))
+            playlist.export_to_file()
+        return spotify_tracks
 
     def scrape_album(self, album_id: str):
         return self._client.get(f'https://api.spotify.com/v1/albums/{album_id}').json()
@@ -155,7 +159,10 @@ class SpotifyScraper:
             ids.append(category['id'])
         return ids
 
+    def get_playlist_data(self, playlist_id: str) -> str:
+        return self.get(f'https://api.spotify.com/v1/playlists/{playlist_id}').json()
+
     def get_playlist(self, playlist_id: str) -> str:
-        playlist_data = self.get(f'https://api.spotify.com/v1/playlists/{playlist_id}').json()
+        playlist_data = self.get_playlist_data(playlist_id)
         tracks = self.scrape_playlist_tracks(playlist_id)
         return SpotifyPlaylist(spotify_id=playlist_id, tracks=tracks, data=playlist_data)
