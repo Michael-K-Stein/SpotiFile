@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <title>Spotifile</title>
+    
+    <script>
+        let offset = 0;
+        const interval = setInterval(async function() {
+
+            const response = await fetch(`/info/console/?offset=${offset}`);
+            const data = await response.json();
+
+            offset = data['offset'];
+
+            for (let i = 0; i < data['logs'].length; ++i)
+            {
+                let log_line = document.createElement('p');
+                log_line.innerHTML = `${data['logs'][i]['time']} | ${data['logs'][i]['value']}`;
+                log_line.style.color = data['logs'][i]['color'];
+
+                document.getElementById('console-output').appendChild(log_line);
+            }
+
+            document.getElementById('console-output').scrollTop = 999999999999999999999999;
+        }, 1000);
+    </script>
+</head>
+<body class="dark-mode center-all">
+    <div id="download-selector">
+        <form id="download-form" action="/actions/download/" method="POST" target="dummy-frame">
+            <input type="text" id="flink" name="flink" placeholder="https://open.spotify.com/..." style="width:30em;">
+            <input type="submit" value="Download"/><br>
+            <div style="display:flex;justify-content:center;"><div style="display:flex;flex-direction:column;width:fit-content;">
+            <div class="single-line"><label>Recursive: </label><input type="checkbox" name="recursive"></div>
+            <div class="single-line"><label>Recusive Album: </label><input type="checkbox" name="recursive-album"></div>
+            <div class="single-line"><label>Recusive Artist: </label><input type="checkbox" name="recursive-artist"></div>
+            <div class="single-line"><label>Recursive Limit: </label><input type="number" name="recursive-limit" value="1024"></div>
+            <div class="single-line"><label>Thread Limit: </label><input type="number" name="thread-count" value="5"></div>
+            </div></div>
+        </form>
+    </div>
+    <div id="console-output" class="align-bottom scrollable">
+    </div>
+
+    <iframe id="dummy-frame" name="dummy-frame" style="display:none;"></iframe>
+</body>
+</html>
