@@ -1,2 +1,4 @@
 __pycache__/
+music/
+*.mp3
 *.json

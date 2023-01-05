@@ -43,6 +43,8 @@ class SpotifyScraper:
             return self.scrape_album_tracks(self.extract_id_from_link(link))
         elif id_type == self.IDTypes.Artist:
             return self.scrape_artist_tracks(self.extract_id_from_link(link), intense=True, console=console)
+        elif id_type == self.IDTypes.Track:
+            return [SpotifyTrack(self.get(f'https://api.spotify.com/v1/tracks/{self.extract_id_from_link(link)}').json())]
 
     def scrape_playlist(self, playlist_id: str):
         return self._client.get(f'https://api.spotify.com/v1/playlists/{playlist_id}').json()
