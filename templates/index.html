@@ -25,7 +25,9 @@
                 document.getElementById('console-output').appendChild(log_line);
             }
 
-            document.getElementById('console-output').scrollTop = 999999999999999999999999;
+            if (document.getElementById('autoscroll').checked) {
+                document.getElementById('console-output').scrollTop = 999999999999999999999999;
+            }
         }, 1000);
     </script>
 </head>
@@ -43,6 +45,7 @@
             </div></div>
         </form>
     </div>
+    <div style="display:inline-flex;align-items:baseline;"><label>Autoscroll: </label><input id="autoscroll" type="checkbox" checked></div>
     <div id="console-output" class="align-bottom scrollable">
     </div>
 
