@@ -25,9 +25,10 @@ FULL_DOWNLOAD_RECURISVE_LIMIT = 0x4000
 FULL_DOWNLOAD_THREAD_LIMIT = 50
 VERBOSE_OUTPUTS = False
 
-DEFAULT_DOWNLOAD_DIRECTORY = 'music_05-01-2023'
+DEFAULT_DOWNLOAD_DIRECTORY = 'music'
 ARTIST_IMAGES_SUB_DIR = '_Artists'
-GLOBALS_SAVE_FILE = '_downloaded_store.pkl'
+PLAYLIST_METADATA_SUB_DIR = '_Playlists'
+GLOBALS_SAVE_FILE = '_downloaded_store.json'
 
 def clean_file_path(prompt: str):
     return prompt.replace('?', '').replace('"', '').replace('*', '').replace('|', '').replace('\\', '').replace(':', '').replace('>', '').replace('<', '')

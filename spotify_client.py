@@ -98,6 +98,8 @@ class SpotifyClient:
 
             response_json = session.get('https://api.spotify.com/v1/me', verify=self._verify_ssl).json()
         self.user_data = response_json
+        if not 'product' in self.user_data:
+            raise Exception('Spotify client keys are invalid.')
         if self.user_data['product'] == 'premium':
             raise Exception('THIS USER IS PREMIUM!')
         return response_json
