@@ -104,6 +104,7 @@ def save_globals_save_file():
             data = json.loads(f.read())
             g_downloaded_songs = json.loads(data['songs'])
             g_downloaded_artist_covers = json.loads(data['artists'])
+            console.log(f'Loaded {len(g_downloaded_songs)} songs & {len(g_downloaded_artist_covers)} artists')
     except Exception as ex:
         console.error(f'Failed to load globals save file! Exception: {ex}')
     while g_keep_saving > 0:
