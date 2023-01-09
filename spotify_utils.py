@@ -167,6 +167,9 @@ class SpotifyTrack:
         self.thumbnail = self.download_thumbnail(scraper)
         self.lyrics = self.get_lyrics(scraper)
     
+    def preview_title(self):
+        return f'{", ".join([x.name for x in self.artists])} - {self.title} [{self.album.title}]'
+
     def download_to_file(self, scraper, output_path: str):
         temp_file_path = f'temp/{hashlib.sha1(self.title.encode() + self.album.spotify_id.encode()).hexdigest()}.temp.mp3'
         self.package_download(scraper)
@@ -188,9 +191,9 @@ class SpotifyTrack:
 
         audio_file.tag.save()
 
-        output_path = clean_file_path(output_path)
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        shutil.move(temp_file_path, output_path)
+        full_output_path = output_path + '/' + clean_file_path(self.preview_title()) + '.mp3'
+        os.makedirs(os.path.dirname(full_output_path), exist_ok=True)
+        shutil.move(temp_file_path, full_output_path)
 
 
 class SpotifyPlaylist:
@@ -222,7 +225,8 @@ class SpotifyPlaylist:
         return json.dumps(data)
     
     def export_to_file(self) -> None:
-        with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{self.spotify_id}.playlist', 'w') as f:
+        os.makedirs(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.PLAYLIST_METADATA_SUB_DIR}/', exist_ok=True)
+        with open(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.PLAYLIST_METADATA_SUB_DIR}/{self.spotify_id}.playlist', 'w') as f:
             f.write(self.export())
 
     @property

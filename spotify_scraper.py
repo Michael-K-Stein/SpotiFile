@@ -61,7 +61,7 @@ class SpotifyScraper:
         if len(tracks) != int(playlist_data['total']):
             print(f'Warning: track count does not match! {len(tracks)} != {int(playlist_data["tracks"]["total"])}')
         spotify_tracks = [SpotifyTrack(track_data) for track_data in tracks]
-        if AUTO_DOWNLOAD_PLAYLIST_METADATA:
+        if settings.AUTO_DOWNLOAD_PLAYLIST_METADATA:
             playlist = SpotifyPlaylist(playlist_id, spotify_tracks, self.get_playlist_data(playlist_id))
             playlist.export_to_file()
         return spotify_tracks
