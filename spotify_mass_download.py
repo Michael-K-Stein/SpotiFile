@@ -65,7 +65,7 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
             track.download_to_file(scraper, track_path)
             console.happy(f'Thread<{my_thread_id}> | Downloaded: {track.preview_title()}')
             if (recursive_album or recursive) and len(track_list) < recursive_limit:
-                new_tracks = scraper.scrape_album_tracks(track.album.spotify_id)
+                new_tracks = list(scraper.scrape_album_tracks(track.album.spotify_id))
                 for new_track in new_tracks:
                     if new_track not in track_list and len(track_list) < recursive_limit:
                         track_list.append(new_track)
@@ -84,11 +84,11 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
 
                 if (recursive_artist or recursive) and len(track_list) < recursive_limit:
                     old_size = len(track_list)
-                    track_list += scraper.scrape_artist_tracks(artist.spotify_id)
+                    track_list += list(scraper.scrape_artist_tracks(artist.spotify_id))
                     if recursive_artist:
-                        albums = scraper.scrape_artist_albums(artist.spotify_id)
+                        albums = list(scraper.scrape_artist_albums(artist.spotify_id))
                         for album in albums:
-                            track_list += scraper.scrape_album_tracks(album['id'])
+                            track_list += list(scraper.scrape_album_tracks(album['id']))
                     console.log(f'Thread<{my_thread_id}> | Scraped {len(track_list) - old_size} new songs through recursive artist!')
         except Exception as ex:
             console.error(f'Thread<{my_thread_id}> | Exception: {ex}')
@@ -129,15 +129,16 @@ def full_download(download_dir: str, identifier: str, recursive_artist: bool=Fal
 
         client.refresh_tokens()
         console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}, {recursive_limit=}, {thread_count=}')
-        track_list = scraper.scrape_tracks(identifier, console=console)
-        console.log(f'Scraping on identifier: {identifier} yielded {len(track_list)} tracks!')
+        #console.log(f'Scraping on identifier: {identifier} yielded {len(track_list)} tracks!')
         download_threads = []
-        thread_subsection_size = int(len(track_list) / thread_count)
-        for i in range(thread_count - 1):
-            download_threads.append(Thread(target=download_track_list, args=(download_dir, track_list[thread_subsection_size * i : (thread_subsection_size * i) + thread_subsection_size], recursive_artist, recursive_album, recursive, recursive_limit)))
-            download_threads[-1].start()
-            sleep(0.05)
-        download_threads.append(Thread(target=download_track_list, args=(download_dir, track_list[thread_subsection_size * (thread_count - 1):], recursive_artist, recursive_album, recursive, recursive_limit)))
+        track_list = []
+        for track in scraper.scrape_tracks(identifier, console=console):
+            track_list.append(track)
+            if len(track_list) == recursive_limit / thread_count:
+                download_threads.append(Thread(target=download_track_list, args=(download_dir, list(track_list), recursive_artist, recursive_album, recursive, recursive_limit)))
+                download_threads[-1].start()
+                sleep(0.05)
+        download_threads.append(Thread(target=download_track_list, args=(download_dir, list(track_list), recursive_artist, recursive_album, recursive, recursive_limit)))
         download_threads[-1].start()
 
         [x.join() for x in download_threads]
@@ -165,7 +166,7 @@ def download_all_categories_playlists(download_meta_data_only=True):
                     playlist = scraper.get_playlist(playlist_id)
                     playlist.export_to_file()
                     if not download_meta_data_only:
-                        full_download(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href)
+                        full_download(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href, thread_count=15)
                 except Exception as ex:
                     console.error(f'Scraping categories exception: {ex}')
         except Exception as ex:
