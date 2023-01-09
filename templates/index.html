@@ -57,12 +57,12 @@
     </div>
     <div>
         <div style="display:inline-flex;align-items:baseline;"><label>Show settings: </label><input id="autoscroll" type="checkbox" checked onchange="toggle_settings_visibility();"></div>
-        <fieldset id="settings-container" style="display:contents;" name="Settings">
+        <div id="settings-container" style="display:block;" name="Settings">
             <form action="/settings/" method="POST" target="dummy-frame" style="width:100%;">
                 <input name="download-dir" placeholder="Download directory" value="{{settings.DEFAULT_DOWNLOAD_DIRECTORY}}">
                 <input type="Submit" value="Save">
             </form>
-        </fieldset>
+        </div>
     </div>
     <div style="display:inline-flex;align-items:baseline;"><label>Autoscroll: </label><input id="autoscroll" type="checkbox" checked></div>
     <div id="console-output" class="align-bottom scrollable">

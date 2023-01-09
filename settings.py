@@ -1,5 +1,5 @@
 class Settings:
-    DEFAULT_DOWNLOAD_DIRECTORY = 'music'
+    DEFAULT_DOWNLOAD_DIRECTORY = 'E:\\Spotify\\'
     ARTIST_IMAGES_SUB_DIR = '_Artists'
     PLAYLIST_METADATA_SUB_DIR = '_Playlists'
     GLOBALS_SAVE_FILE = '_downloaded_store.json'

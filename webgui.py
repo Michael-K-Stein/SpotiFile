@@ -32,7 +32,7 @@ def actions_download():
 
 @app.route('/actions/download/categories')
 def actions_download_categories():
-    download_all_categories_playlists()
+    download_all_categories_playlists(download_meta_data_only=False)
 
 
 @app.route('/info/console/')

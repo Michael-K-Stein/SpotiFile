@@ -24,4 +24,4 @@ VERIFY_SSL = True
 settings = Settings()
 
 def clean_file_path(prompt: str):
-    return prompt.replace('?', '').replace('"', '').replace('*', '').replace('|', '').replace('\\', '').replace(':', '').replace('>', '').replace('<', '')
+    return prompt.replace('/', '').replace('?', '').replace('"', '').replace('*', '').replace('|', '').replace('\\', '').replace(':', '').replace('>', '').replace('<', '')
