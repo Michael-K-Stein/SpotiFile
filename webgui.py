@@ -30,9 +30,12 @@ def actions_download():
         return str(ex)
 
 
-@app.route('/actions/download/categories')
+@app.route('/actions/download/categories', methods=['POST'])
 def actions_download_categories():
-    download_all_categories_playlists(download_meta_data_only=False)
+    query = request.form.get('query')
+    if not query:
+        query = ''
+    download_all_categories_playlists(download_meta_data_only=False, query=query)
 
 
 @app.route('/info/console/')

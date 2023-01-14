@@ -54,9 +54,13 @@
             <div class="single-line"><label>Thread Limit: </label><input type="number" name="thread-count" value="5"></div>
             </div></div>
         </form>
+        <form id="category-download-form" action="/actions/download/categories" method="POST" target="dummy-frame">
+            <input type="text" id="query" name="query" placeholder="Category query (e.g. 'pop')" style="width:30em;">
+            <input type="submit" value="Download"/><br>
+        </form>
     </div>
     <div>
-        <div style="display:inline-flex;align-items:baseline;"><label>Show settings: </label><input id="autoscroll" type="checkbox" checked onchange="toggle_settings_visibility();"></div>
+        <div style="display:inline-flex;align-items:baseline;"><label>Show settings: </label><input type="checkbox" checked onchange="toggle_settings_visibility();"></div>
         <div id="settings-container" style="display:block;" name="Settings">
             <form action="/settings/" method="POST" target="dummy-frame" style="width:100%;">
                 <input name="download-dir" placeholder="Download directory" value="{{settings.DEFAULT_DOWNLOAD_DIRECTORY}}">

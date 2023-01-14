@@ -155,17 +155,21 @@ class SpotifyScraper:
         return playlist_ids
 
     def get_category_playlists(self, category_id: str, limit:int=50, offset:int=0) -> str:
-        return self.get(f'https://api.spotify.com/v1/browse/categories/{category_id}/playlists/?limit={limit}&offset={offset}').json()
+        data = self.get(f'https://api.spotify.com/v1/browse/categories/{category_id}/playlists/?limit={limit}&offset={offset}').json()
+        return data
 
     def get_categories(self, limit=50) -> str:
-        return self.get(f'https://api.spotify.com/v1/browse/categories/?limit={limit}').json()
+        return self.get(f'https://api.spotify.com/v1/browse/categories/?limit={limit}&country=IL').json()
 
-    def get_categories_ids(self, limit=50) -> str:
+    def get_categories_full(self, limit=50, query:str='') -> list[SpotifyCategory]:
         categories = self.get_categories()
-        ids = []
-        for category in categories['categories']['items']:
-            ids.append(category['id'])
-        return ids
+        categories_data = []
+        os.makedirs(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.CATEGORY_METADATA_SUB_DIR}/', exist_ok=True)
+        for category_json in categories['categories']['items']:
+            if not query or query.lower() in category_json['name'].lower(): 
+                category = SpotifyCategory(category_json)
+                categories_data.append(category)
+        return categories_data
 
     def get_playlist_data(self, playlist_id: str) -> str:
         return self.get(f'https://api.spotify.com/v1/playlists/{playlist_id}').json()

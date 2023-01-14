@@ -2,6 +2,7 @@ class Settings:
     DEFAULT_DOWNLOAD_DIRECTORY = 'E:\\Spotify\\'
     ARTIST_IMAGES_SUB_DIR = '_Artists'
     PLAYLIST_METADATA_SUB_DIR = '_Playlists'
+    CATEGORY_METADATA_SUB_DIR = '_Categories'
     GLOBALS_SAVE_FILE = '_downloaded_store.json'
     FULL_DOWNLOAD_RECURISVE_LIMIT = 0x4000
     FULL_DOWNLOAD_THREAD_LIMIT = 50
