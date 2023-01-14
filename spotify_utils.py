@@ -3,6 +3,40 @@ import base64
 from config import *
 
 
+class SpotifyCategory:
+    name = ''
+    spotify_id = ''
+    playlist_ids = ''
+    thumbnail_href = ''
+
+    def __init__(self, category_data=None):
+        self.name = category_data['name']
+        self.spotify_id = category_data['id']
+        if len(category_data['icons']) > 0:
+            self.thumbnail_href = category_data['icons'][0]['url']
+
+    def download_metadata(self, scraper):
+
+        thumbail_b64 = ''
+        if self.thumbnail_href:
+            thumbail_b64 = base64.b64encode( requests.get(self.thumbnail_href).content ).decode()
+
+        try:
+            self.playlist_ids = scraper.get_category_playlist_ids(category_id=self.spotify_id)
+        except:
+            self.playlist_ids = []
+
+        data = {
+            'name': self.name,
+            'spotify_id': self.spotify_id,
+            'thumbnail_b64': thumbail_b64,
+            'playlist_ids': self.playlist_ids,
+        }
+
+        with open(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.CATEGORY_METADATA_SUB_DIR}/{self.spotify_id}.category', 'w') as f:
+            f.write(json.dumps(data))
+
+
 class SpotifyAlbum:
     title = ''
     thumbnail_href = ''
@@ -167,6 +201,9 @@ class SpotifyTrack:
         self.thumbnail = self.download_thumbnail(scraper)
         self.lyrics = self.get_lyrics(scraper)
     
+    def preview_title(self):
+        return f'{", ".join([x.name for x in self.artists])} - {self.title} [{self.album.title}]'
+
     def download_to_file(self, scraper, output_path: str):
         temp_file_path = f'temp/{hashlib.sha1(self.title.encode() + self.album.spotify_id.encode()).hexdigest()}.temp.mp3'
         self.package_download(scraper)
@@ -188,9 +225,9 @@ class SpotifyTrack:
 
         audio_file.tag.save()
 
-        output_path = clean_file_path(output_path)
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        shutil.move(temp_file_path, output_path)
+        full_output_path = output_path + '/' + clean_file_path(self.preview_title()) + '.mp3'
+        os.makedirs(os.path.dirname(full_output_path), exist_ok=True)
+        shutil.move(temp_file_path, full_output_path)
 
 
 class SpotifyPlaylist:
@@ -222,7 +259,8 @@ class SpotifyPlaylist:
         return json.dumps(data)
     
     def export_to_file(self) -> None:
-        with open(f'{DEFAULT_DOWNLOAD_DIRECTORY}/{PLAYLIST_METADATA_SUB_DIR}/{self.spotify_id}.playlist', 'w') as f:
+        os.makedirs(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.PLAYLIST_METADATA_SUB_DIR}/', exist_ok=True)
+        with open(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.PLAYLIST_METADATA_SUB_DIR}/{self.spotify_id}.playlist', 'w') as f:
             f.write(self.export())
 
     @property

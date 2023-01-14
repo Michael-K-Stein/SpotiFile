@@ -25,8 +25,20 @@
                 document.getElementById('console-output').appendChild(log_line);
             }
 
-            document.getElementById('console-output').scrollTop = 999999999999999999999999;
+            if (document.getElementById('autoscroll').checked) {
+                document.getElementById('console-output').scrollTop = 999999999999999999999999;
+            }
         }, 1000);
+
+        let settings_visible = true;
+        function toggle_settings_visibility() {
+            if (settings_visible) {
+                document.getElementById('settings-container').setAttribute('hidden', '')
+            } else {
+                document.getElementById('settings-container').removeAttribute('hidden')
+            };
+            settings_visible = !settings_visible;
+        };
     </script>
 </head>
 <body class="dark-mode center-all">
@@ -42,7 +54,21 @@
             <div class="single-line"><label>Thread Limit: </label><input type="number" name="thread-count" value="5"></div>
             </div></div>
         </form>
+        <form id="category-download-form" action="/actions/download/categories" method="POST" target="dummy-frame">
+            <input type="text" id="query" name="query" placeholder="Category query (e.g. 'pop')" style="width:30em;">
+            <input type="submit" value="Download"/><br>
+        </form>
     </div>
+    <div>
+        <div style="display:inline-flex;align-items:baseline;"><label>Show settings: </label><input type="checkbox" checked onchange="toggle_settings_visibility();"></div>
+        <div id="settings-container" style="display:block;" name="Settings">
+            <form action="/settings/" method="POST" target="dummy-frame" style="width:100%;">
+                <input name="download-dir" placeholder="Download directory" value="{{settings.DEFAULT_DOWNLOAD_DIRECTORY}}">
+                <input type="Submit" value="Save">
+            </form>
+        </div>
+    </div>
+    <div style="display:inline-flex;align-items:baseline;"><label>Autoscroll: </label><input id="autoscroll" type="checkbox" checked></div>
     <div id="console-output" class="align-bottom scrollable">
     </div>
 

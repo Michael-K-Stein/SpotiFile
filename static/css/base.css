@@ -100,7 +100,7 @@ form input[type="number"] {
     padding: 2px;
 }
 
-form input[type="checkbox"] {
+input[type="checkbox"] {
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
@@ -119,7 +119,7 @@ form input[type="checkbox"] {
     place-content: center;
 }
 
-form input[type="checkbox"]::before {
+input[type="checkbox"]::before {
     content: "";
     width: 0.65em;
     height: 0.65em;
@@ -131,11 +131,11 @@ form input[type="checkbox"]::before {
     clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
 }
   
-form input[type="checkbox"]:checked::before {
+input[type="checkbox"]:checked::before {
     transform: scale(1);
 }
 
-form input[type="checkbox"]:hover {
+input[type="checkbox"]:hover {
     outline: max(2px, 0.15em) solid currentColor;
     outline-offset: max(2px, 0.15em);
 }
