@@ -61,7 +61,7 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
                 downloaded_count += 1
                 continue
             g_downloaded_songs.append(track.spotify_id)
-            track_path = f'{download_dir}{track.artists[0].name}/{track.album.title}'
+            track_path = f'{download_dir}{clean_file_path(track.artists[0].name)}/{clean_file_path(track.album.title)}'
             track.download_to_file(scraper, track_path)
             console.happy(f'Thread<{my_thread_id}> | Downloaded: {track.preview_title()}')
             if (recursive_album or recursive) and len(track_list) < recursive_limit:
