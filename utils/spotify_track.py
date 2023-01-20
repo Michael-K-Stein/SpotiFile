@@ -48,7 +48,9 @@ class SpotifyTrack:
         self.explicit = data['explicit']
         self.href = data['href']
         self.popularity = data['popularity']
-        self.isrc = data['external_ids']['isrc']
+        if 'isrc' in data['external_ids']:
+            # isrc is not available for local files
+            self.isrc = data['external_ids']['isrc']
 
     def __str__(self) -> str:
         return f'SpotifyTrack< {self.title} >'
@@ -65,9 +67,13 @@ class SpotifyTrack:
         return scraper.get(self.thumbnail_href).content
 
     def get_download_link(self, scraper) -> str:
+        if not self.isrc:
+            return ''
         return Deezer.get_track_download_url(Deezer.get_track_data(Deezer.get_track_id_from_isrc(self.isrc)))[0]
 
     def download(self, scraper) -> bytes:
+        if not self.isrc:
+            raise SpotifyTrackException(f'Cannot download local file {self.title}!')
         try:
             download_link = self.get_download_link(scraper)
             data = Deezer.decrypt_download_data(requests.get(download_link, headers={'Accept':'*/*'}), self.isrc)

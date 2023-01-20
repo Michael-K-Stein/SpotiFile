@@ -39,7 +39,7 @@ class SpotifyScraper:
     def extract_id_from_link(self, link: str) -> str:
         return link[link.rindex('/') + 1:]
 
-    def scrape_tracks(self, link: str, console=None) -> list:
+    def scrape_tracks(self, link: str, console=None) -> list[SpotifyTrack]:
         id_type = self.identify_link_type(link)
         if id_type == self.IDTypes.Playlist:
             return self.scrape_playlist_tracks(self.extract_id_from_link(link))

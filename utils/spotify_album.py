@@ -14,8 +14,11 @@ class SpotifyAlbum:
             self.load_from_data(album_data)
 
     def load_from_data(self, data):
+        if not data['album_type']:
+            return
         self.title = data['name']
-        self.thumbnail_href = data['images'][0]['url']
+        if len(data['images']) > 0:
+            self.thumbnail_href = data['images'][0]['url']
         self.track_count = data['total_tracks']
         try:
             self.release_date = time.mktime(datetime.datetime.strptime(data['release_date'], "%Y-%m-%d").timetuple())
