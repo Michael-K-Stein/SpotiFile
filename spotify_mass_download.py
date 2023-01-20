@@ -107,6 +107,9 @@ def save_globals_save_file():
             console.log(f'Loaded {len(g_downloaded_songs)} songs & {len(g_downloaded_artist_covers)} artists')
     except Exception as ex:
         console.error(f'Failed to load globals save file! Exception: {ex}')
+        if os.path.exists(settings.GLOBALS_SAVE_FILE):
+            console.error(f'TO avoid data loss, SpotiFile will now exit.')
+            exit(1)
     while g_keep_saving > 0:
         with open(settings.GLOBALS_SAVE_FILE, 'w') as f:
             g_downloaded_songs_json = json.dumps(g_downloaded_songs)
