@@ -48,7 +48,7 @@ body {
     border-radius: 1vw;
     text-align: left;
     padding: 10px;
-    max-height: 50vh;
+    max-height: 40vh;
     width: calc(100% - 10px);
     overflow-x: hidden;
     overflow-y: scroll;
