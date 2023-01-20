@@ -1,6 +1,7 @@
 from email.mime import audio
 import base64
 from config import *
+from exceptions import SpotifyTrackException, SpotifyArtistException
 
 
 class SpotifyCategory:
@@ -63,7 +64,6 @@ class SpotifyAlbum:
                 except:
                     self.release_date = '0000-00-00'
         self.spotify_id = data['id']
-        #self.href = data['href']
 
     def __str__(self) -> str:
         return f'SpotifyAlbum< {self.title} >'
@@ -98,7 +98,7 @@ class SpotifyArtist:
             return b''
         artist_images = scraper.get(self.href()).json()['images']
         if len(artist_images) == 0:
-            raise Exception(f'Artist "{self.name}" has no image!')
+            raise SpotifyArtistException(f'Artist "{self.name}" has no image!')
         image_response = requests.get(artist_images[0]['url'])
         return image_response.content
 
@@ -149,7 +149,7 @@ class SpotifyTrack:
 
     def get_lyrics(self, scraper) -> str:
         if scraper is None:
-            raise Exception('SCAPER NOT AVAILABLE!')
+            raise SpotifyTrackException('SCAPER NOT AVAILABLE!')
         return scraper.get_lyrics(self.spotify_id)
     
     def download_thumbnail(self, scraper) -> bytes:
@@ -194,7 +194,7 @@ class SpotifyTrack:
             data = self.decrypt_download_data(requests.get(download_link, headers={'Accept':'*/*'}))
             return data
         except Exception as ex:
-            raise Exception(f'Failed to download {self.title} | Exception: {ex}')
+            raise SpotifyTrackException(f'Failed to download {self.title} | Exception: {ex}')
     
     def package_download(self, scraper):
         self.audio = self.download(scraper)
