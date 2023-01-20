@@ -1,8 +1,9 @@
-from concurrent.futures import process
-from config import *
-from spotify_utils import *
-from spotify_client import SpotifyClient
 from enum import Enum
+from config import *
+from utils.spotify_track import SpotifyTrack
+from utils.spotify_playlist import SpotifyPlaylist
+from utils.spotify_category import SpotifyCategory
+from spotify_client import SpotifyClient
 
 
 class SpotifyScraper:

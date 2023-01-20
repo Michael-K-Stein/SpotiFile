@@ -7,6 +7,7 @@ import base64
 from time import sleep
 from datetime import datetime
 import random
+from utils.utils import clean_file_path
 
 client = SpotifyClient(sp_key=SP_KEY, sp_dc=SP_DC)
 client.get_me()

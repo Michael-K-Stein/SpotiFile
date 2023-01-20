@@ -14,3 +14,7 @@ class SpotifyTrackException(SpotiFileException):
 
 class SpotifyArtistException(SpotiFileException):
     pass
+
+
+class DeezerException(SpotiFileException):
+    pass
