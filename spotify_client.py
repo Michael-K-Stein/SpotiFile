@@ -1,4 +1,5 @@
 from config import *
+from exceptions import SpotifyClientException
 
 
 class SpotifyClient:
@@ -99,9 +100,9 @@ class SpotifyClient:
             response_json = session.get('https://api.spotify.com/v1/me', verify=self._verify_ssl).json()
         self.user_data = response_json
         if not 'product' in self.user_data:
-            raise Exception('Spotify client keys are invalid.')
+            raise SpotifyClientException('Spotify client keys are invalid.\nVerify that you have entered valid SP_KEY & SP_DC values.')
         if self.user_data['product'] == 'premium':
-            raise Exception('THIS USER IS PREMIUM!')
+            raise SpotifyClientException('THIS USER IS PREMIUM!')
         return response_json
 
     def get_premium_keys(self):
