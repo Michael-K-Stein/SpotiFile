@@ -1,4 +1,7 @@
+ILLEGAL_FILE_NAME_CHARACTERS = '/?"*|\\:;><#%{}$!\'@`='
 
 
 def clean_file_path(prompt: str):
-    return prompt.replace('/', '').replace('?', '').replace('"', '').replace('*', '').replace('|', '').replace('\\', '').replace(':', '').replace(';', '').replace('>', '').replace('<', '')
+    for illegal_char in ILLEGAL_FILE_NAME_CHARACTERS:
+        prompt = prompt.replace(illegal_char, '')
+    return prompt
