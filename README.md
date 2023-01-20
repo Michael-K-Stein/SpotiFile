@@ -1,5 +1,6 @@
 # SpotiFile
 ## A simple and open source spotify scraper.
+*Python 3.8+*
 
 ---
 
@@ -15,11 +16,16 @@ This allows SpotiFile to download information en-masse quickly.
 ## Why?
 Downloading massive amounts of songs and meta data can help if you prefer listening to music offline, or if you are desgining a music server which runs on an airgapped network.
 *We do not encourage music piracy nor condone any illegal activity. SpotiFile is a usefull research tool. Usage of SpotiFile for other purposes is at the user's own risk.*
+### Proper and legitimate uses of SpotiFile:
++ Scraping tracks to create datasets for machine learning models.
++ Creating remixes (for personal use only!)
++ Downloading music which no longer falls under copyright law ([Generally, content who's original artist passed away over 70 years ago](https://www.copyright.gov/help/faq/faq-duration.html)).
 
 ---
 
 ## How?
 SpotiFile starts its life by authenticating as a normal Spotify user, and then performs a wide range of conventional and unconventional API calls to Spotify in order to retrieve relevant information.
+SpotiFile does not actually download audio from Spotify, since they use proper DRM encryption to protect against piracy. Rather, SpotiFile finds the relevant audio file on Deezer, using the copyright id (ironically). Then SpotiFile downloads the "encrypted" audio file from Deezer, which failed to implement DRM properly. Credit for reversing Deezer's encryption goes to https://git.fuwafuwa.moe/toad/ayeBot/src/branch/master/bot.py & https://notabug.org/deezpy-dev/Deezpy/src/master/deezpy.py & https://www.reddit.com/r/deemix/ (Original reversing algorithm has been taken down).
 
 ---
 
@@ -28,12 +34,15 @@ SpotiFile starts its life by authenticating as a normal Spotify user, and then p
 + Scraping tracks from a playlist.
 + Scraping tracks from an album.
 + Scraping tracks from an artist.
++ Scraping playlists from a user.
++ Scraping playlists from a catergory.
 + Scraping a track from a track url.
 + Scraping artist images.
 + Scraping popular playlists' metadata and tracks.
 + Premium user token snatching (experimental).
 + Scraping song lyrics (time synced when possible).
 + Scraping track metadata.
++ Scraping category metadata.
 
 ---
 
