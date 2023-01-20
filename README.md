@@ -51,7 +51,6 @@ Go into the application section.
 In the menu on the left go int Storage/Cookies/open.spotify.com.
 Find the sp_dc and sp_key and copy the values.
 Close the window without logging out (Otherwise the cookies are made invalid).
-cookie in chrome developer tools
 
 ### Firefox based browser
 Open a new Incognito window at https://open.spotify.com and login to Spotify.
@@ -60,5 +59,4 @@ Go into the Storage section. (You might have to click on the right arrows to rev
 Select the Cookies sub-menu and then https://open.spotify.com.
 Find the sp_dc and sp_key and copy the values.
 Close the window without logging out (Otherwise the cookies are made invalid).
-Firefox developer tool
 
