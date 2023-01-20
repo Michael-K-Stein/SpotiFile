@@ -119,7 +119,7 @@ def save_globals_save_file():
             f.write( json.dumps(data) )
         if settings.VERBOSE_OUTPUTS:
             console.log('Saved globals file!')
-        sleep(15)
+        sleep(settings.DOWNLOADS_FILE_SAVE_INTERVAL)
 
 
 def full_download(download_dir: str, identifier: str, recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False, recursive_limit:int=1024, thread_count:int=5):
@@ -133,7 +133,6 @@ def full_download(download_dir: str, identifier: str, recursive_artist: bool=Fal
 
         client.refresh_tokens()
         console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}, {recursive_limit=}, {thread_count=}')
-        #console.log(f'Scraping on identifier: {identifier} yielded {len(track_list)} tracks!')
         download_threads = []
         track_list = []
         for track in scraper.scrape_tracks(identifier, console=console):
@@ -177,12 +176,11 @@ def download_all_categories_playlists(download_meta_data_only=True, query:str=''
     random.shuffle(categories)
     for category_index, category in enumerate(categories):
         console.log(f'Scraping playlists from category {category.name} ({category_index + 1}/{len(categories)})')
-        #category.download_metadata(scraper=scraper)
+        category.download_metadata(scraper=scraper)
         try:
             thread = Thread(target=download_category_playlists, args=(category.spotify_id, category_index, categories, download_meta_data_only))
             thread.start()
             threads.append(thread)
-            #download_category_playlists(category_id, category_index=category_index, category_ids=category_ids, download_meta_data_only=download_meta_data_only)
         except Exception as ex:
                 console.error(f'Scraping categories exception: {ex}')
 
