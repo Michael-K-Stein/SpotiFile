@@ -1,5 +1,5 @@
 class Settings:
-    DEFAULT_DOWNLOAD_DIRECTORY = 'E:\\Spotify\\'
+    DEFAULT_DOWNLOAD_DIRECTORY = 'music/'
     ARTIST_IMAGES_SUB_DIR = '_Artists'
     PLAYLIST_METADATA_SUB_DIR = '_Playlists'
     CATEGORY_METADATA_SUB_DIR = '_Categories'
