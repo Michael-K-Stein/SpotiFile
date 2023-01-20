@@ -20,6 +20,7 @@ Downloading massive amounts of songs and meta data can help if you prefer listen
 
 ## How?
 SpotiFile starts its life by authenticating as a normal Spotify user, and then performs a wide range of conventional and unconventional API calls to Spotify in order to retrieve relevant information.
+SpotiFile does not actually download audio from Spotify, since they use proper DRM encryption to protect against piracy. Rather, SpotiFile finds the relevant audio file on Deezer, using the copyright id (ironically). Then SpotiFile downloads the "encrypted" audio file from deezer, and decrypts it using the private key that Deezer leaked a while ago.
 
 ---
 
