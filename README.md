@@ -34,3 +34,32 @@ SpotiFile starts its life by authenticating as a normal Spotify user, and then p
 + Premium user token snatching (experimental).
 + Scraping song lyrics (time synced when possible).
 + Scraping track metadata.
+
+---
+
+## SP_KEY & SP_DC tokens
+Obtaining sp_dc and sp_key cookies
+SpotiFile uses two cookies to authenticate against Spotify in order to have access to the required services.
+
+To obtain the cookies, these different methods can be used:
+
+### Chrome based browser
+Chrome web console
+Open a new Incognito window at https://open.spotify.com and login to Spotify.
+Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+Go into the application section.
+In the menu on the left go int Storage/Cookies/open.spotify.com.
+Find the sp_dc and sp_key and copy the values.
+Close the window without logging out (Otherwise the cookies are made invalid).
+cookie in chrome developer tools
+
+### Firefox based browser
+Firefox web console
+Open a new Incognito window at https://open.spotify.com and login to Spotify.
+Press Command+Option+I (Mac) or Control+Shift+I or F12. This should open the developer tools menu of your browser.
+Go into the Storage section. (You might have to click on the right arrows to reveal the section).
+Select the Cookies sub-menu and then https://open.spotify.com.
+Find the sp_dc and sp_key and copy the values.
+Close the window without logging out (Otherwise the cookies are made invalid).
+Firefox developer tool
+
