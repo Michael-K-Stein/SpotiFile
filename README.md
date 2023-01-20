@@ -34,12 +34,14 @@ SpotiFile does not actually download audio from Spotify, since they use proper D
 + Scraping tracks from an album.
 + Scraping tracks from an artist.
 + Scraping playlists from a user.
++ Scraping playlists from a catergory.
 + Scraping a track from a track url.
 + Scraping artist images.
 + Scraping popular playlists' metadata and tracks.
 + Premium user token snatching (experimental).
 + Scraping song lyrics (time synced when possible).
 + Scraping track metadata.
++ Scraping category metadata.
 
 ---
 
