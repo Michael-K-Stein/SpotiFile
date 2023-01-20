@@ -1,5 +1,6 @@
 # SpotiFile
 ## A simple and open source spotify scraper.
+*Python 3.8+*
 
 ---
 
