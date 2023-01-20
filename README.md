@@ -40,7 +40,7 @@ SpotiFile starts its life by authenticating as a normal Spotify user, and then p
 ## SP_KEY & SP_DC tokens
 Obtaining sp_dc and sp_key cookies
 SpotiFile uses two cookies to authenticate against Spotify in order to have access to the required services.
-* Shoutout to @fondberg for the explanation https://github.com/fondberg/spotcast *
+*Shoutout to @fondberg for the explanation https://github.com/fondberg/spotcast*
 
 To obtain the cookies, these different methods can be used:
 
