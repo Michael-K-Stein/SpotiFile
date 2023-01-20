@@ -28,6 +28,7 @@ SpotiFile starts its life by authenticating as a normal Spotify user, and then p
 + Scraping tracks from a playlist.
 + Scraping tracks from an album.
 + Scraping tracks from an artist.
++ Scraping playlists from a user.
 + Scraping a track from a track url.
 + Scraping artist images.
 + Scraping popular playlists' metadata and tracks.
