@@ -183,6 +183,6 @@ def download_all_categories_playlists(download_meta_data_only=True, query:str=''
             threads.append(thread)
             #download_category_playlists(category_id, category_index=category_index, category_ids=category_ids, download_meta_data_only=download_meta_data_only)
         except Exception as ex:
-                    console.error(f'Scraping categories exception: {ex}')
+                console.error(f'Scraping categories exception: {ex}')
 
     [x.join() for x in threads]
