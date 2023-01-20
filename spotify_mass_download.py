@@ -7,6 +7,7 @@ import base64
 from time import sleep
 from datetime import datetime
 import random
+from utils.utils import clean_file_path
 
 client = SpotifyClient(sp_key=SP_KEY, sp_dc=SP_DC)
 client.get_me()
@@ -60,10 +61,10 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
                 console.info(f'Thread<{my_thread_id}> | Skipping already downloaded song: {track.title}')
                 downloaded_count += 1
                 continue
-            g_downloaded_songs.append(track.spotify_id)
             track_path = f'{download_dir}{clean_file_path(track.artists[0].name)}/{clean_file_path(track.album.title)}'
             track.download_to_file(scraper, track_path)
             console.happy(f'Thread<{my_thread_id}> | Downloaded: {track.preview_title()}')
+            g_downloaded_songs.append(track.spotify_id)
             if (recursive_album or recursive) and len(track_list) < recursive_limit:
                 new_tracks = list(scraper.scrape_album_tracks(track.album.spotify_id))
                 for new_track in new_tracks:
@@ -107,6 +108,9 @@ def save_globals_save_file():
             console.log(f'Loaded {len(g_downloaded_songs)} songs & {len(g_downloaded_artist_covers)} artists')
     except Exception as ex:
         console.error(f'Failed to load globals save file! Exception: {ex}')
+        if os.path.exists(settings.GLOBALS_SAVE_FILE):
+            console.error(f'TO avoid data loss, SpotiFile will now exit.')
+            exit(1)
     while g_keep_saving > 0:
         with open(settings.GLOBALS_SAVE_FILE, 'w') as f:
             g_downloaded_songs_json = json.dumps(g_downloaded_songs)
@@ -180,6 +184,6 @@ def download_all_categories_playlists(download_meta_data_only=True, query:str=''
             threads.append(thread)
             #download_category_playlists(category_id, category_index=category_index, category_ids=category_ids, download_meta_data_only=download_meta_data_only)
         except Exception as ex:
-                    console.error(f'Scraping categories exception: {ex}')
+                console.error(f'Scraping categories exception: {ex}')
 
     [x.join() for x in threads]
