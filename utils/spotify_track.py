@@ -16,6 +16,7 @@ from exceptions import SpotifyTrackException
 class SpotifyTrack:
     title = ''
     spotify_id = ''
+    artist = ''
     artists = []
     album = None
     thumbnail_href = ''
