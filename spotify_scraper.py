@@ -1,6 +1,8 @@
 from enum import Enum
+from typing import Generator
 from config import *
 from utils.spotify_track import SpotifyTrack
+from utils.spotify_album import SpotifyAlbum
 from utils.spotify_playlist import SpotifyPlaylist
 from utils.spotify_category import SpotifyCategory
 from spotify_client import SpotifyClient
@@ -39,7 +41,7 @@ class SpotifyScraper:
     def extract_id_from_link(self, link: str) -> str:
         return link[link.rindex('/') + 1:]
 
-    def scrape_tracks(self, link: str, console=None) -> list[SpotifyTrack]:
+    def scrape_tracks(self, link: str, console=None) -> Generator[SpotifyTrack, None, None]:
         id_type = self.identify_link_type(link)
         if id_type == self.IDTypes.Playlist:
             return self.scrape_playlist_tracks(self.extract_id_from_link(link))
@@ -80,7 +82,7 @@ class SpotifyScraper:
     def scrape_album(self, album_id: str):
         return self._client.get(f'https://api.spotify.com/v1/albums/{album_id}').json()
 
-    def scrape_album_tracks(self, album_id: str):
+    def scrape_album_tracks(self, album_id: str) -> Generator[SpotifyTrack, None, None]:
         limit = 50
         offset = 0
         ret = self._client.get(f'https://api.spotify.com/v1/albums/{album_id}/tracks?limit={limit}').json()
@@ -95,34 +97,30 @@ class SpotifyScraper:
     def scrape_artist(self, artist_id: str):
         return self.get(f'https://api.spotify.com/v1/artists/{artist_id}/top-tracks?market=from_token').json()
 
-    def scrape_artist_albums(self, artist_id: str):
+    def scrape_artist_albums(self, artist_id: str) -> Generator[SpotifyAlbum, None, None]:
         offset = 0
         limit = 50
         albums_data = self.get(f'https://api.spotify.com/v1/artists/{artist_id}/albums?market=from_token&limit={limit}&offset={offset}').json()
-        albums = albums_data['items']
+        for album in albums_data['items']:
+            yield SpotifyAlbum(album)
         while albums_data['next'] is not None:
             offset += limit
             albums_data = self.get(f'https://api.spotify.com/v1/artists/{artist_id}/albums?market=from_token&limit={limit}&offset={offset}').json()
-            albums += albums_data['items']
-        return albums
+            for album in albums_data['items']:
+                yield SpotifyAlbum(album)
 
-    def scrape_artist_tracks(self, artist_id: str, intense:bool=False, console=None):
+    def scrape_artist_tracks(self, artist_id: str, intense:bool=False, console=None) -> Generator[SpotifyTrack, None, None]:
         tracks = self.scrape_artist(artist_id)['tracks']
         try:
             artist_name = tracks[0]['album']['artists'][0]['name']
         except:
             artist_name = 'Unknown'
-        proccessed_tracks = [SpotifyTrack(track_data) for track_data in tracks]
-        yield proccessed_tracks
+        for track_data in tracks:
+            yield SpotifyTrack(track_data)
         if intense:
-            albums = self.scrape_artist_albums(artist_id)
-            proccessed_album_count = 0
-            for album in albums:
-                for track in self.scrape_album_tracks(album['id']):
+            for album in self.scrape_artist_albums(artist_id):
+                for track in self.scrape_album_tracks(album.spotify_id):
                     yield track
-                proccessed_album_count += 1
-                if console is not None:
-                    console.log(f'Scraping {artist_name}\'s albums: {proccessed_album_count} / {len(albums)}')
 
     def get(self, url: str) -> Response:
         return self._client.get(url)
@@ -180,7 +178,7 @@ class SpotifyScraper:
         tracks = self.scrape_playlist_tracks(playlist_id)
         return SpotifyPlaylist(spotify_id=playlist_id, tracks=tracks, data=playlist_data)
 
-    def scrape_user_items(self, user_id: str, limit:int=50) -> list[SpotifyTrack]:
+    def scrape_user_items(self, user_id: str, limit:int=50) -> Generator[SpotifyTrack, None, None]:
         has_next = True
         user_playlists = []
         while has_next:

@@ -1,5 +1,6 @@
 from threading import Thread, get_ident
 import pickle
+from typing import Generator
 from spotify_client import SpotifyClient
 from spotify_scraper import SpotifyScraper
 from config import *
@@ -8,6 +9,7 @@ from time import sleep
 from datetime import datetime
 import random
 from utils.utils import clean_file_path
+from utils.spotify_track import SpotifyTrack
 
 client = SpotifyClient(sp_key=SP_KEY, sp_dc=SP_DC)
 client.get_me()
@@ -48,7 +50,7 @@ class Console:
 console = Console()
 
 
-def download_track_list(download_dir: str, track_list: list, recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False, recursive_limit=1024):
+def download_track_list(download_dir: str, track_list: Generator[SpotifyTrack, None, None], recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False, recursive_limit=1024):
     global g_downloaded_songs, g_downloaded_artist_covers
     my_thread_id = str(get_ident()).zfill(6)
     artist_images_download_dir = f'{download_dir}/{settings.ARTIST_IMAGES_SUB_DIR}'
@@ -65,12 +67,8 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
             track.download_to_file(scraper, track_path)
             console.happy(f'Thread<{my_thread_id}> | Downloaded: {track.preview_title()}')
             g_downloaded_songs.append(track.spotify_id)
-            if (recursive_album or recursive) and len(track_list) < recursive_limit:
-                new_tracks = list(scraper.scrape_album_tracks(track.album.spotify_id))
-                for new_track in new_tracks:
-                    if new_track not in track_list and len(track_list) < recursive_limit:
-                        track_list.append(new_track)
-                console.log(f'Thread<{my_thread_id}> | Scraped {len(new_tracks)} new songs through recursive album!')
+            if (recursive_album or recursive):
+                download_track_list(download_dir=download_dir, track_list=scraper.scrape_album_tracks(track.album.spotify_id), recursive=False)
             
             for artist in track.artists:
                 if artist.spotify_id not in g_downloaded_artist_covers:
@@ -83,19 +81,16 @@ def download_track_list(download_dir: str, track_list: list, recursive_artist: b
                         console.error(str(ex))
                     g_downloaded_artist_covers.append(artist.spotify_id)
 
-                if (recursive_artist or recursive) and len(track_list) < recursive_limit:
-                    old_size = len(track_list)
-                    track_list += list(scraper.scrape_artist_tracks(artist.spotify_id))
+                if (recursive_artist or recursive):
+                    download_track_list(download_dir=download_dir, track_list=scraper.scrape_artist_tracks(track.artist.spotify_id), recursive=False)
                     if recursive_artist:
-                        albums = list(scraper.scrape_artist_albums(artist.spotify_id))
-                        for album in albums:
-                            track_list += list(scraper.scrape_album_tracks(album['id']))
-                    console.log(f'Thread<{my_thread_id}> | Scraped {len(track_list) - old_size} new songs through recursive artist!')
+                        for album in scraper.scrape_artist_albums(artist.spotify_id):
+                            download_track_list(download_dir=download_dir, track_list=scraper.scrape_album_tracks(album['id']), recursive=False)
         except Exception as ex:
             console.error(f'Thread<{my_thread_id}> | Exception: {ex}')
         downloaded_count += 1
         if settings.VERBOSE_OUTPUTS:
-            console.log(f'Thread<{my_thread_id}> | Processed {downloaded_count} / {len(track_list)}')
+            console.log(f'Thread<{my_thread_id}> | Processed {downloaded_count} tracks')
 
 
 def save_globals_save_file():
@@ -133,18 +128,7 @@ def full_download(download_dir: str, identifier: str, recursive_artist: bool=Fal
 
         client.refresh_tokens()
         console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}, {recursive_limit=}, {thread_count=}')
-        download_threads = []
-        track_list = []
-        for track in scraper.scrape_tracks(identifier, console=console):
-            track_list.append(track)
-            if len(track_list) == recursive_limit / thread_count:
-                download_threads.append(Thread(target=download_track_list, args=(download_dir, list(track_list), recursive_artist, recursive_album, recursive, recursive_limit)))
-                download_threads[-1].start()
-                sleep(0.05)
-        download_threads.append(Thread(target=download_track_list, args=(download_dir, list(track_list), recursive_artist, recursive_album, recursive, recursive_limit)))
-        download_threads[-1].start()
-
-        [x.join() for x in download_threads]
+        download_track_list(download_dir=download_dir, track_list=scraper.scrape_tracks(identifier, console=console), recursive=recursive, recursive_album=recursive_album, recursive_artist=recursive_artist, recursive_limit=recursive_limit)
 
         console.log(f'Comletely done scraping identifier: {identifier}!')
 
