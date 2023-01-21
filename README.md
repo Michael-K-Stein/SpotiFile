@@ -4,6 +4,15 @@
 
 ---
 
+## Quick Start
+Make sure you have python 3.8 or above.
+> git clone https://github.com/Michael-K-Stein/SpotiFile.git
+> cd SpotiFile
+Now open config.py and setup your SP_KEY and SP_DC tokens ([see below](https://github.com/Michael-K-Stein/SpotiFile#sp_key--sp_dc-tokens))
+> python main.py
+
+---
+
 ## What?
 SpotiFile is a script which allows users to simply and easily, using a web-gui, scrape on Spotify playlists, albums, artists, etc.
 More advanced usages can be done by importing the relevant classes (e.g. from "spotify_scraper import SpotifyScraper") and then using IPython to access specific Spotify API features.
