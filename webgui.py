@@ -19,12 +19,10 @@ def actions_download():
         recursive = request.form.get('recursive') or False
         recursive_artist = request.form.get('recursive-artist') or False
         recursive_album = request.form.get('recursive-album') or False
-        recursive_limit = min(int(request.form.get('recursive-limit')) or 1024, settings.FULL_DOWNLOAD_RECURISVE_LIMIT)
-        thread_count = min(int(request.form.get('thread-count')) or 5, settings.FULL_DOWNLOAD_THREAD_LIMIT)
         recursive = True if recursive == 'on' else False
         recursive_album = True if recursive_album == 'on' else False
         recursive_artist = True if recursive_artist == 'on' else False
-        full_download(settings.DEFAULT_DOWNLOAD_DIRECTORY, spotify_url, recursive=recursive, recursive_artist=recursive_artist, recursive_album=recursive_album, recursive_limit=recursive_limit, thread_count=thread_count)
+        full_download(settings.DEFAULT_DOWNLOAD_DIRECTORY, spotify_url, recursive=recursive, recursive_artist=recursive_artist, recursive_album=recursive_album)
         return 'success'
     except Exception as ex:
         return str(ex)

@@ -50,7 +50,7 @@ class Console:
 console = Console()
 
 
-def download_track_list(download_dir: str, track_list: Generator[SpotifyTrack, None, None], recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False, recursive_limit=1024):
+def download_track_list(download_dir: str, track_list: Generator[SpotifyTrack, None, None], recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False):
     global g_downloaded_songs, g_downloaded_artist_covers
     my_thread_id = str(get_ident()).zfill(6)
     artist_images_download_dir = f'{download_dir}/{settings.ARTIST_IMAGES_SUB_DIR}'
@@ -117,7 +117,7 @@ def save_globals_save_file():
         sleep(settings.DOWNLOADS_FILE_SAVE_INTERVAL)
 
 
-def full_download(download_dir: str, identifier: str, recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False, recursive_limit:int=1024, thread_count:int=5):
+def full_download(download_dir: str, identifier: str, recursive_artist: bool=False, recursive_album: bool=False, recursive: bool=False):
     global g_downloaded_songs, g_downloaded_artist_covers, g_keep_saving
     try:
         artist_images_download_dir = f'{download_dir}/{settings.ARTIST_IMAGES_SUB_DIR}'
@@ -127,8 +127,8 @@ def full_download(download_dir: str, identifier: str, recursive_artist: bool=Fal
         g_keep_saving += 1
 
         client.refresh_tokens()
-        console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}, {recursive_limit=}, {thread_count=}')
-        download_track_list(download_dir=download_dir, track_list=scraper.scrape_tracks(identifier, console=console), recursive=recursive, recursive_album=recursive_album, recursive_artist=recursive_artist, recursive_limit=recursive_limit)
+        console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}')
+        download_track_list(download_dir=download_dir, track_list=scraper.scrape_tracks(identifier, console=console), recursive=recursive, recursive_album=recursive_album, recursive_artist=recursive_artist)
 
         console.log(f'Comletely done scraping identifier: {identifier}!')
 
