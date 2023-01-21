@@ -109,7 +109,7 @@ def save_globals_save_file():
     except Exception as ex:
         console.error(f'Failed to load globals save file! Exception: {ex}')
         if os.path.exists(settings.GLOBALS_SAVE_FILE):
-            console.error(f'TO avoid data loss, SpotiFile will now exit.')
+            console.error(f'To avoid data loss, SpotiFile will now exit.')
             exit(1)
     while g_keep_saving > 0:
         with open(settings.GLOBALS_SAVE_FILE, 'w') as f:
