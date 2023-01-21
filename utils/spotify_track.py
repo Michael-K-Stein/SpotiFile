@@ -5,6 +5,7 @@ import hashlib
 import datetime
 import os
 import shutil
+import json
 from utils.spotify_album import SpotifyAlbum
 from utils.spotify_artist import SpotifyArtist
 from utils.deezer_utils import Deezer
@@ -28,6 +29,7 @@ class SpotifyTrack:
     lyrics = ''
     thumnail = b''
     data_dump = ''
+    isrc = ''
 
     def __init__(self, track_data=None) -> None:
         if track_data is not None:
@@ -98,8 +100,8 @@ class SpotifyTrack:
         audio_file = eyed3.load(temp_file_path)
         audio_file.initTag(version=(2, 4, 0))  # version is important
         audio_file.tag.title = self.title
-        audio_file.tag.artist = '/'.join([artist.name for artist in self.artists])
-        audio_file.tag.album_artist = '/'.join([artist.name for artist in self.artists])
+        audio_file.tag.artist = ';'.join([artist.name for artist in self.artists])
+        audio_file.tag.album_artist = self.artists[0].name
         audio_file.tag.album = self.album.title
         audio_file.tag.original_release_date = datetime.datetime.fromtimestamp(self.album.release_date).year
         audio_file.tag.track_num = self.track_number
