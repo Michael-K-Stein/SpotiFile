@@ -8,7 +8,7 @@
 Make sure you have python 3.8 or above.  
 $ git clone https://github.com/Michael-K-Stein/SpotiFile.git  
 $ cd SpotiFile  
-Now open config.py and setup your SP_KEY and SP_DC tokens ([see below](https://github.com/Michael-K-Stein/SpotiFile#sp_key--sp_dc-tokens))  
+Now open config.py and setup your SP_KEY (Spotify has renamed this to sp_adid) and SP_DC tokens ([see below](https://github.com/Michael-K-Stein/SpotiFile#sp_key--sp_dc-tokens))  
 $ python main.py  
 
 ---
@@ -56,7 +56,7 @@ SpotiFile does not actually download audio from Spotify, since they use proper D
 ---
 
 ## SP_KEY & SP_DC tokens
-Obtaining sp_dc and sp_key cookies
+Obtaining sp_dc and sp_key cookies (sp_key is now called sp_adid)
 SpotiFile uses two cookies to authenticate against Spotify in order to have access to the required services.
 *Shoutout to @fondberg for the explanation https://github.com/fondberg/spotcast*
 
