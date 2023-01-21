@@ -4,6 +4,7 @@ import requests
 import os
 from config import settings
 from utils.spotify_track import SpotifyTrack
+from typing import List
 
 
 class SpotifyPlaylist:
@@ -13,7 +14,7 @@ class SpotifyPlaylist:
     title = ''
     description = ''
 
-    def __init__(self, spotify_id, tracks:list[SpotifyTrack], data):
+    def __init__(self, spotify_id, tracks:List[SpotifyTrack], data):
         self.spotify_id = spotify_id
         self.tracks = tracks
         self.title = data['name']

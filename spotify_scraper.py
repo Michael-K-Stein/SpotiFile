@@ -6,6 +6,7 @@ from utils.spotify_album import SpotifyAlbum
 from utils.spotify_playlist import SpotifyPlaylist
 from utils.spotify_category import SpotifyCategory
 from spotify_client import SpotifyClient
+from typing import List
 
 
 class SpotifyScraper:
@@ -160,7 +161,7 @@ class SpotifyScraper:
     def get_categories(self, limit=50) -> str:
         return self.get(f'https://api.spotify.com/v1/browse/categories/?limit={limit}&country=IL').json()
 
-    def get_categories_full(self, limit=50, query:str='') -> list[SpotifyCategory]:
+    def get_categories_full(self, limit=50, query:str='') -> List[SpotifyCategory]:
         categories = self.get_categories()
         categories_data = []
         os.makedirs(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.CATEGORY_METADATA_SUB_DIR}/', exist_ok=True)
