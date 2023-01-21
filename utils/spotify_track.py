@@ -16,7 +16,7 @@ from exceptions import SpotifyTrackException
 class SpotifyTrack:
     title = ''
     spotify_id = ''
-    artist = ''
+    artist = None
     artists = []
     album = None
     thumbnail_href = ''
@@ -44,6 +44,7 @@ class SpotifyTrack:
         self.title = data['name']
         self.spotify_id = data['id']
         self.artists = [SpotifyArtist(x) for x in data['artists']]
+        self.artist = self.artists[0]
         self.thumbnail_href = self.album.thumbnail_href
         self.release_date = self.album.release_date
         self.track_number = data['track_number']
