@@ -55,60 +55,44 @@ class SpotifyScraper:
         elif id_type == self.IDTypes.User:
             return self.scrape_user_items(self.extract_id_from_link(link))
 
+    def scrape_pagination(self, url:str) -> Generator[str, None, None]:
+        limit = 50
+        offset = 0
+        ret = self._client.get(f'{url}{"?" if "?" not in url else ""}&limit={limit}').json()
+        for item in ret['items']:
+            yield item
+        while ret['next'] is not None:
+            offset += limit
+            ret = self._client.get(f'{url}{"?" if "?" not in url else ""}&offset={offset}&limit={limit}').json()
+            for item in ret['items']:
+                yield item
+
     def scrape_playlist(self, playlist_id: str):
         return self._client.get(f'https://api.spotify.com/v1/playlists/{playlist_id}').json()
 
-    def scrape_playlist_tracks(self, playlist_id: str):
-        offset = 0
-        limit = 100
-        playlist_data = self._client.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks?offset={offset}&limit={limit}&market=from_token').json()
-        tracks = playlist_data['items']
-        for track_data in playlist_data['items']:
-            yield SpotifyTrack(track_data)
-        while playlist_data['next'] is not None:
-            offset += limit
-            playlist_data = self._client.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks?offset={offset}&limit={limit}&market=from_token').json()
-            tracks += playlist_data['items']
-            for track_data in playlist_data['items']:
-                yield SpotifyTrack(track_data)
-        if len(tracks) != int(playlist_data['total']):
-            print(f'Warning: track count does not match! {len(tracks)} != {int(playlist_data["tracks"]["total"])}')
-        for track_data in tracks:
-            yield SpotifyTrack(track_data)
-        spotify_tracks = [SpotifyTrack(track_data) for track_data in tracks]
+    def scrape_playlist_tracks(self, playlist_id: str) -> Generator[SpotifyTrack, None, None]:
+        tracks = []
+        for track in self.scrape_pagination(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks?market=from_token'):
+            spotify_track = SpotifyTrack(self.get(track['track']['href']).json())
+            tracks.append(spotify_track)
+            yield spotify_track
         if settings.AUTO_DOWNLOAD_PLAYLIST_METADATA:
-            playlist = SpotifyPlaylist(playlist_id, spotify_tracks, self.get_playlist_data(playlist_id))
+            playlist = SpotifyPlaylist(playlist_id, tracks, self.get_playlist_data(playlist_id))
             playlist.export_to_file()
 
     def scrape_album(self, album_id: str):
         return self._client.get(f'https://api.spotify.com/v1/albums/{album_id}').json()
 
     def scrape_album_tracks(self, album_id: str) -> Generator[SpotifyTrack, None, None]:
-        limit = 50
-        offset = 0
-        ret = self._client.get(f'https://api.spotify.com/v1/albums/{album_id}/tracks?limit={limit}').json()
-        for track in ret['items']:
+        for track in self.scrape_pagination(f'https://api.spotify.com/v1/albums/{album_id}/tracks'):
             yield SpotifyTrack(self.get(track['href']).json())
-        while ret['next'] is not None:
-            offset += limit
-            ret = self._client.get(f'https://api.spotify.com/v1/albums/{album_id}/tracks?offset={offset}&limit={limit}').json()
-            for track in ret['items']:
-                yield SpotifyTrack(self.get(track['href']).json())
 
     def scrape_artist(self, artist_id: str):
         return self.get(f'https://api.spotify.com/v1/artists/{artist_id}/top-tracks?market=from_token').json()
 
     def scrape_artist_albums(self, artist_id: str) -> Generator[SpotifyAlbum, None, None]:
-        offset = 0
-        limit = 50
-        albums_data = self.get(f'https://api.spotify.com/v1/artists/{artist_id}/albums?market=from_token&limit={limit}&offset={offset}').json()
-        for album in albums_data['items']:
+        for album in self.scrape_pagination(f'https://api.spotify.com/v1/artists/{artist_id}/albums?market=from_token'):
             yield SpotifyAlbum(album)
-        while albums_data['next'] is not None:
-            offset += limit
-            albums_data = self.get(f'https://api.spotify.com/v1/artists/{artist_id}/albums?market=from_token&limit={limit}&offset={offset}').json()
-            for album in albums_data['items']:
-                yield SpotifyAlbum(album)
 
     def scrape_artist_tracks(self, artist_id: str, intense:bool=False, console=None) -> Generator[SpotifyTrack, None, None]:
         tracks = self.scrape_artist(artist_id)['tracks']
@@ -161,7 +145,7 @@ class SpotifyScraper:
     def get_categories(self, limit=50) -> str:
         return self.get(f'https://api.spotify.com/v1/browse/categories/?limit={limit}&country=IL').json()
 
-    def get_categories_full(self, limit=50, query:str='') -> List[SpotifyCategory]:
+    def get_categories_full(self, query:str='') -> List[SpotifyCategory]:
         categories = self.get_categories()
         categories_data = []
         os.makedirs(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}/{settings.CATEGORY_METADATA_SUB_DIR}/', exist_ok=True)
@@ -179,14 +163,7 @@ class SpotifyScraper:
         tracks = self.scrape_playlist_tracks(playlist_id)
         return SpotifyPlaylist(spotify_id=playlist_id, tracks=tracks, data=playlist_data)
 
-    def scrape_user_items(self, user_id: str, limit:int=50) -> Generator[SpotifyTrack, None, None]:
-        has_next = True
-        user_playlists = []
-        while has_next:
-            user_playlist_set = self.get(f'https://api.spotify.com/v1/users/{user_id}/playlists?limit={limit}').json()
-            has_next = user_playlist_set['next']
-            for playlist in user_playlist_set['items']:
-                user_playlists.append(playlist['id'])
-        for playlist_id in user_playlists:
-            for track in self.scrape_playlist_tracks(playlist_id):
+    def scrape_user_items(self, user_id: str) -> Generator[SpotifyTrack, None, None]:
+        for playlist in self.scrape_pagination(f'https://api.spotify.com/v1/users/{user_id}/playlists'):
+            for track in self.scrape_playlist_tracks(playlist['id']):
                 yield track
