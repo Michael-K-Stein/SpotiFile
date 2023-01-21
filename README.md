@@ -5,11 +5,11 @@
 ---
 
 ## Quick Start
-Make sure you have python 3.8 or above.
-$ git clone https://github.com/Michael-K-Stein/SpotiFile.git
-$ cd SpotiFile
-Now open config.py and setup your SP_KEY and SP_DC tokens ([see below](https://github.com/Michael-K-Stein/SpotiFile#sp_key--sp_dc-tokens))
-$ python main.py
+Make sure you have python 3.8 or above.  
+$ git clone https://github.com/Michael-K-Stein/SpotiFile.git  
+$ cd SpotiFile  
+Now open config.py and setup your SP_KEY and SP_DC tokens ([see below](https://github.com/Michael-K-Stein/SpotiFile#sp_key--sp_dc-tokens))  
+$ python main.py  
 
 ---
 
