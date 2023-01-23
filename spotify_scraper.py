@@ -5,6 +5,7 @@ from utils.spotify_track import SpotifyTrack
 from utils.spotify_album import SpotifyAlbum
 from utils.spotify_playlist import SpotifyPlaylist
 from utils.spotify_category import SpotifyCategory
+from utils.spotify_artist import SpotifyArtist
 from spotify_client import SpotifyClient
 from typing import List
 
@@ -96,12 +97,11 @@ class SpotifyScraper:
 
     def scrape_artist_tracks(self, artist_id: str, intense:bool=False, console=None) -> Generator[SpotifyTrack, None, None]:
         tracks = self.scrape_artist(artist_id)['tracks']
-        try:
-            artist_name = tracks[0]['album']['artists'][0]['name']
-        except:
-            artist_name = 'Unknown'
+        artist = SpotifyArtist(artist_data=tracks[0]['album']['artists'][0])
         for track_data in tracks:
             yield SpotifyTrack(track_data)
+        for track in self.scrape_playlist_tracks(artist.get_this_is_playlist(self)):
+            yield track
         if intense:
             for album in self.scrape_artist_albums(artist_id):
                 for track in self.scrape_album_tracks(album.spotify_id):
