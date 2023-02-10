@@ -146,7 +146,7 @@ def download_category_playlists(category_id, category_index, category_ids, downl
             playlist = scraper.get_playlist(playlist_id)
             playlist.export_to_file()
             if not download_meta_data_only:
-                full_download(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href, thread_count=15)
+                full_download(f'{settings.DEFAULT_DOWNLOAD_DIRECTORY}', identifier=playlist.href, recursive=True, recursive_album=True, recursive_artist=True)
         except Exception as ex:
             console.error(f'Scraping categories exception: {ex}')
 
