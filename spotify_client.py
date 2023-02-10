@@ -12,6 +12,8 @@ class SpotifyClient:
 
     user_data = None
 
+    _api_token = os.getenv('api-token')
+
     def __init__(self, sp_dc=None, sp_key=None):
         self.dc = sp_dc
         self.key = sp_key
@@ -115,7 +117,7 @@ class SpotifyClient:
             prem_keys[cookie['name']] = cookie['value']
         return prem_keys
 
-    def get(self, url: str) -> Response:
+    def get(self, url: str, dev:bool=False) -> Response:
         with requests.session() as session:
             session.proxies = self._proxy
 
@@ -123,7 +125,7 @@ class SpotifyClient:
                 'User-Agent': self.__USER_AGENT,
                 'Accept': 'application/json',
                 'Client-Token': self._client_token,
-                'Authorization': f'Bearer {self._access_token}',
+                'Authorization': f'Bearer {self._access_token if not dev else self._api_token}',
                 'Origin': 'https://open.spotify.com',
                 'Sec-Fetch-Dest': 'empty',
                 'Sec-Fetch-Mode': 'cors',

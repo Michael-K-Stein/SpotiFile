@@ -107,8 +107,8 @@ class SpotifyScraper:
                 for track in self.scrape_album_tracks(album.spotify_id):
                     yield track
 
-    def get(self, url: str) -> Response:
-        return self._client.get(url)
+    def get(self, url: str, dev:bool=False) -> Response:
+        return self._client.get(url, dev=dev)
 
     def post(self, url: str, payload=None) -> Response:
         return self._client.post(url, payload=payload)
@@ -124,6 +124,13 @@ class SpotifyScraper:
             return self.get(f'https://api.spotify.com/v1/audio-features/{track_id}').json()
         except Exception as ex:
             return ''
+
+    def get_tracks_features(self, track_ids: list[str]) -> dict[str,str]:
+        resp = self.get(f'https://api.spotify.com/v1/audio-features?ids={",".join(track_ids)}', dev=True).json()
+        features = {}
+        for feature in resp['audio_features']:
+            features[feature['id']] = feature
+        return features
 
     def get_category_playlist_ids(self, category_id: str, limit=50, offset=0) -> str:
         playlist_ids = []
