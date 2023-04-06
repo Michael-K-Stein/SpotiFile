@@ -33,6 +33,9 @@ Downloading massive amounts of songs and meta data can help if you prefer listen
 *The following is not permitted for any reason whatsoever in relation to the Services and the material or content made available through the Services, or any part thereof: 
 5. "crawling" or "scraping", whether manually or by automated means, or otherwise using any automated means (including bots, scrapers, and spiders), to view, access or collect information;*
 Usage of this "scraper" is in violation of Spotify's User Guidelines. By using this code, you assume responsibility - as *you* are the one "scraping" Spotify using automated means.
+### Please notice Deezer's Terms of Use, and make sure you understand them. See article 8 - Intellectual property;
+*The Recordings on the Deezer Free Service are protected digital files by national and international copyright and neighboring rights. They may only therefore be listened to within a private or family setting. Any use for a non-private purpose will expose the Deezer Free User to civil and/or criminal proceedings. Any other use of the Recordings is strictly forbidden and more particularly any download or attempt to download, any transfer or attempt to transfer permanently or temporarily on the hard drive of a computer or any other device (notably music players), any burn or attempt to burn a CD or any other support are expressly forbidden. Any resale, exchange or renting of these files is strictly prohibited.*
+Storing, or attempting to store files from Deezer is strictly prohibited. Use this software only to create, for personal use, a custom streaming app. Notice that you can only use this streaming app in a private or family setting.
 
 ---
 
