@@ -14,6 +14,7 @@ $ python main.py
 ---
 
 *DISCLAIMER: This script is intended for personal and non-commercial use only. The purpose of this script is to create datasets for training machine learning models. Any use of this script that violates Deezer's Terms of Use or infringes on its intellectual property rights is strictly prohibited. The writer of this script is not responsible for any illegal or unauthorized use of the script by third parties. Users of this script assume all responsibility for their actions and agree to use the script at their own risk.*
+*AVIS DE NON-RESPONSABILITÉ : Ce script est destiné à un usage personnel et non commercial uniquement. Le but de ce script est de créer des ensembles de données pour entraîner des modèles d'apprentissage automatique. Toute utilisation de ce script qui viole les Conditions d'utilisation de Deezer ou porte atteinte à ses droits de propriété intellectuelle est strictement interdite en vertu de la loi française. L'auteur de ce script n'est pas responsable de toute utilisation illégale ou non autorisée du script par des tiers. Les utilisateurs de ce script assument toutes les responsabilités de leurs actions et conviennent de l'utiliser à leurs propres risques.*
 
 ---
 
