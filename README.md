@@ -15,7 +15,7 @@ $ python main.py
 
 ## What?
 SpotiFile is a script which allows users to simply and easily, using a web-gui, scrape on Spotify playlists, albums, artists, etc.
-More advanced usages can be done by importing the relevant classes (e.g. from "`spotify_scraper import SpotifyScraper`") and then using IPython to access specific Spotify API features.
+More advanced usages can be done by importing the relevant classes (e.g. ```python from spotify_scraper import SpotifyScraper```) and then using IPython to access specific Spotify API features.
 ### Advantages
 The main advantage of using SpotiFile is that it completely circumvents all of Spotify's api call limmits and restrictions. Spotifile offers an API to communicate with Spotify's API as if it were a real user.
 This allows SpotiFile to download information en-masse quickly.
