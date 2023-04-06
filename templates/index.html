@@ -21,12 +21,11 @@
                 let log_line = document.createElement('p');
                 log_line.innerHTML = `${data['logs'][i]['time']} | ${data['logs'][i]['value']}`;
                 log_line.style.color = data['logs'][i]['color'];
-
                 document.getElementById('console-output').appendChild(log_line);
-            }
-
-            if (document.getElementById('autoscroll').checked) {
-                document.getElementById('console-output').scrollTop = 999999999999999999999999;
+                if (document.getElementById('autoscroll').checked) 
+                {
+                document.getElementById('console-output').scrollTop = document.getElementById('console-output').scrollHeight;
+                }
             }
         }, 1000);
 
