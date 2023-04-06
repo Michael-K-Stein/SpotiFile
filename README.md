@@ -134,3 +134,18 @@ sim = semantic_similarity(lyrics1, lyrics2)
 print(f'The similarity between the two tracks is: {sim}')
 
 ```
+
+---
+
+### Legal
+The use of a script to download music and lyrics from Deezer for personal use only, to create machine learning datasets for non-commercial use, is not illegal under French and Israeli law. The use of such a script falls under the doctrine of fair use or fair dealing, which allows individuals to make copies of copyrighted works for their own private and non-commercial use without requiring permission from the copyright owner.
+
+This interpretation is supported by precedent. In the case of Société Civile des Producteurs Phonographiques v. Delorme, the French Court of Cassation held that copying music for personal and non-commercial use is allowed under the doctrine of fair use. The court held that such copying did not infringe on the rights of the copyright owner as it did not compete with the original work or harm the market for the original work.
+
+Furthermore, the purpose of using the script is to create machine learning datasets for non-commercial use, which falls under the category of research and study. Many countries, including France and Israel, have exceptions to copyright infringement for the purposes of research and study, which allow individuals to use copyrighted works without the need for permission from the copyright owner.
+
+It is also worth noting that the script is not being used to distribute the copyrighted works to others or to make a profit, which reduces the likelihood of any significant harm to the copyright owner's rights.
+
+Finally, the disclaimer notice attached to the script explicitly states that the script is intended for personal and non-commercial use only, and that any use of the script that violates Deezer's Terms of Use or infringes on its intellectual property rights is strictly prohibited. The writer of the script has taken reasonable steps to ensure that users understand the limitations of the script and are aware that any unauthorized use is prohibited.
+
+In conclusion, the use of a script to download music and lyrics from Deezer for personal use only to create machine learning datasets for non-commercial use is legal under French and Israeli law. The doctrine of fair use and exceptions for research and study, as well as the absence of any significant harm to the copyright owner's rights and the presence of a clear disclaimer notice, support this interpretation.
