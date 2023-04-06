@@ -15,6 +15,17 @@ class SpotifyClient:
     def __init__(self, sp_dc=None, sp_key=None):
         self.dc = sp_dc
         self.key = sp_key
+        self.__HEADERS = {
+                'User-Agent': self.__USER_AGENT,
+                'Accept': 'application/json',
+                'Origin': 'https://open.spotify.com',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'Referer': 'https://open.spotify.com/',
+                'Te': 'trailers',
+                'App-Platform': 'WebPlayer'
+            }
         self.get_tokens(sp_dc, sp_key)
 
     def get_tokens(self, sp_dc=None, sp_key=None):
@@ -30,12 +41,7 @@ class SpotifyClient:
     def get_client_token(self, client_id: str):
         with requests.session() as session:
             session.proxies = self._proxy
-            session.headers = {
-                "User-Agent": self.__USER_AGENT,
-                "Accept": "application/json",
-                "Accept-Language": "en-US,en;q=0.5"
-            }
-
+            session.headers = self.__HEADERS
             data = {
                 "client_data": {
                     "client_version": "",
@@ -56,18 +62,7 @@ class SpotifyClient:
     def get_access_token(self, keys=None, sp_dc=None, sp_key=None):
         with requests.session() as session:
             session.proxies = self._proxy
-            session.headers = {
-                'User-Agent': self.__USER_AGENT,
-                'Accept': 'application/json',
-                'Accept-Language': 'en',
-                'Accept-Encoding': 'gzip, deflate',
-                'App-Platform': 'WebPlayer',
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin',
-                'Referer': 'https://open.spotify.com/',
-                'Te': 'trailers'
-            }
+            session.headers = self.__HEADERS
             cookie = {}
             if keys is not None:
                 cookie = keys
@@ -83,19 +78,11 @@ class SpotifyClient:
     def get_me(self):
         with requests.session() as session:
             session.proxies = self._proxy
-            session.headers = {
-                'User-Agent': self.__USER_AGENT,
-                "Accept-Language": "en-US,en;q=0.5",
-                'Accept': 'application/json',
-                'Client-Token': self._client_token,
-                'Authorization': f'Bearer {self._access_token}',
-                'Origin': 'https://open.spotify.com',
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin',
-                'Referer': 'https://open.spotify.com/',
-                'Te': 'trailers'
-            }
+            session.headers = self.__HEADERS
+            session.headers.update({
+                                    'Client-Token': self._client_token,
+                                    'Authorization': f'Bearer {self._access_token}'
+                                    })
 
             response_json = session.get('https://api.spotify.com/v1/me', verify=self._verify_ssl).json()
         self.user_data = response_json
@@ -118,20 +105,11 @@ class SpotifyClient:
     def get(self, url: str) -> Response:
         with requests.session() as session:
             session.proxies = self._proxy
-
-            session.headers = {
-                'User-Agent': self.__USER_AGENT,
-                'Accept': 'application/json',
-                'Client-Token': self._client_token,
-                'Authorization': f'Bearer {self._access_token}',
-                'Origin': 'https://open.spotify.com',
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin',
-                'Referer': 'https://open.spotify.com/',
-                'Te': 'trailers',
-                'App-Platform': 'WebPlayer'
-            }
+            session.headers = self.__HEADERS
+            session.headers.update({
+                                    'Client-Token': self._client_token,
+                                    'Authorization': f'Bearer {self._access_token}'
+                                    })
 
             response = session.get(url, verify=self._verify_ssl)
             return response
@@ -139,20 +117,11 @@ class SpotifyClient:
     def post(self, url: str, payload=None) -> Response:
         with requests.session() as session:
             session.proxies = self._proxy
-
-            session.headers = {
-                'User-Agent': self.__USER_AGENT,
-                'Accept': 'application/json',
-                'Client-Token': self._client_token,
-                'Authorization': f'Bearer {self._access_token}',
-                'Origin': 'https://open.spotify.com',
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin',
-                'Referer': 'https://open.spotify.com/',
-                'Te': 'trailers',
-                'App-Platform': 'WebPlayer'
-            }
+            session.headers = self.__HEADERS
+            session.headers.update({
+                                    'Client-Token': self._client_token,
+                                    'Authorization': f'Bearer {self._access_token}'
+                                    })
 
             response = session.post(url, verify=self._verify_ssl, data=payload)
             return response
