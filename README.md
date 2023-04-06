@@ -13,6 +13,10 @@ $ python main.py
 
 ---
 
+*DISCLAIMER: This script is intended for personal and non-commercial use only. The purpose of this script is to create datasets for training machine learning models. Any use of this script that violates Deezer's Terms of Use or infringes on its intellectual property rights is strictly prohibited. The writer of this script is not responsible for any illegal or unauthorized use of the script by third parties. Users of this script assume all responsibility for their actions and agree to use the script at their own risk.*
+
+---
+
 ## What?
 SpotiFile is a script which allows users to simply and easily, using a web-gui, scrape on Spotify playlists, albums, artists, etc.
 More advanced usages can be done by importing the relevant classes (e.g. 
