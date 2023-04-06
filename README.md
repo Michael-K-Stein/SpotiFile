@@ -91,3 +91,7 @@ Select the Cookies sub-menu and then https://open.spotify.com.
 Find the sp_dc and sp_key and copy the values.
 Close the window without logging out (Otherwise the cookies are made invalid).
 
+---
+
+# Example usages:
+## Using SpotiFile to create a song recommendation module based off song lyrics' semantic similarity: 
