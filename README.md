@@ -29,6 +29,10 @@ Downloading massive amounts of songs and meta data can help if you prefer listen
 + Scraping tracks to create datasets for machine learning models.
 + Creating remixes (for personal use only!)
 + Downloading music which no longer falls under copyright law ([Generally, content who's original artist passed away over 70 years ago](https://www.copyright.gov/help/faq/faq-duration.html)).
+### Please notice Spotify's User Guidelines, and make sure you understand them. See section 5; 
+*The following is not permitted for any reason whatsoever in relation to the Services and the material or content made available through the Services, or any part thereof: 
+5. "crawling" or "scraping", whether manually or by automated means, or otherwise using any automated means (including bots, scrapers, and spiders), to view, access or collect information;*
+Usage of this "scraper" is in violation of Spotify's User Guidelines. By using this code, you assume responsibility - as *you* are the one "scraping" Spotify using automated means.
 
 ---
 
