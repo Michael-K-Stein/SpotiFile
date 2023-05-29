@@ -42,14 +42,23 @@ class SpotifyClient:
         with requests.session() as session:
             session.proxies = self._proxy
             session.headers = self.__HEADERS
+
+            # Clear old tokens, otherwise we will get 400 Bad Request
+            if 'client_token' in session.headers:
+                session.headers.pop('client_token')
+            if 'Authorization' in session.headers:
+                session.headers.pop('Authorization')
+            
             data = {
                 "client_data": {
-                    "client_version": "",
+                    "client_version": "1.2.13.477.ga4363038",
                     "client_id": client_id,
                     "js_sdk_data": 
                     {
                         "device_brand": "",
+                        "device_id": "",
                         "device_model": "",
+                        "device_type": "",
                         "os": "",
                         "os_version": ""
                     }
@@ -57,7 +66,12 @@ class SpotifyClient:
             }
 
             response = session.post('https://clienttoken.spotify.com/v1/clienttoken', json=data, verify=self._verify_ssl)
-            return response.json()['granted_token']['token']
+            try:
+                rj = response.json()
+            except Exception as ex:
+                print('Failed to parse client token response as json!', ex)
+                exit(0)
+            return rj['granted_token']['token']
 
     def get_access_token(self, keys=None, sp_dc=None, sp_key=None):
         with requests.session() as session:
@@ -71,9 +85,14 @@ class SpotifyClient:
             if sp_key is not None:
                 cookie['sp_key'] = sp_key
             response = session.get('https://open.spotify.com/get_access_token', verify=self._verify_ssl, cookies=cookie)
-            print('Access token is anon: ', response.json()['isAnonymous'])
-            self.is_anonymous = response.json()['isAnonymous']
-            return response.json()['accessToken'], response.json()['clientId']
+            try:
+                rj = response.json()
+            except Exception as ex:
+                print('An error occured when generating an access token!', ex)
+                exit(0)
+            print('Access token is anon: ', rj['isAnonymous'])
+            self.is_anonymous = rj['isAnonymous']
+            return rj['accessToken'], rj['clientId'] if rj['clientId'].lower() != 'unknown' else self._client_id
 
     def get_me(self):
         with requests.session() as session:

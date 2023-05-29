@@ -3,7 +3,14 @@ from exceptions import DeezerException
 
 
 class Deezer:
-    _cookies = {'dzr_uniq_id': 'dzr_uniq_id_frc3270536fa4e8fd6594415125daa7ba2096811', 'sid': 'fre82a0685d587f159cb7cf0a5f1e8f7aee759d2'}
+    #_cookies = {'dzr_uniq_id': 'dzr_uniq_id_frc3270536fa4e8fd6594415125daa7ba2096811', 'sid': 'fre82a0685d587f159cb7cf0a5f1e8f7aee759d2'}
+    _cookies = {
+        'dzr_uniq_id': 'dzr_uniq_id_frffc916344f831b489e3f366778a86b7a0f3a2f', 
+        'sid': 'fre1a5ee55bb5ebd4f8505add526aef95c47adf7',
+        '_abck': 'C73904478BC37F15E7303B7140C34A1D~-1~YAAQvphmUrc22TWIAQAAxjnJaQktzRdJM/Z5JSO9mfO0N3a5a2jv1rvxchQJ+/438DyVm/nx+6lmw0PZL+S/zBD6rTRIsHiZzDHYGOL2JHskcx+qgFNFV3haB0NmrsRKzL48t0AfE+xh4uzKa1t6681eLEsxD2+XL4CLpP5dlj+ymhNqMFLY0eJ9fFCCGoXvLCSz8EXqD17PYcDD9DHDpGem7+JFNBfpMOtQuaynJh97LfFSwx/6uzpkjg/oO9cNZ1rfUk5Gy5WLkcz8hn4b6prZk1whzOhom5Zba6Vj1KOTY9DvT67udnGqlrau60nNnopoD1SBQNnFaGhGEV+6oUTCshYzMQ==~-1~-1~-1',
+        'bm_sz':'A81B5CF520F243866A08F5D742986440~YAAQvphmUrg22TWIAQAAxjnJaRNH5QoYzzhPG/doMRczrBcZ8c/bzqsA+MMcCmvUHPtqKvixyokOz4OYzTlV6t8WzsLDAm5gsrf+9Ul9+GLxF/8EjLqXWNalyUDfkOI6tByxylzmM5qobXBE6YOrdBjYBrLqNh32vLej8JPLSoXV37F6iT1i3+TZpUZAf0EYPOoQLIHs5sZbmWtECvjMB0VE6qEeLsOam+BrLd7CupnL+aq/s3JcLPnQft/k2p0f3XUSjywe7DGXPfxitcIDRAYYG8cWoY2ohhU9KJqKNyFM8LQ=~4338228~3488051',
+        'arl':'d4c0a94496e1193e04faf60bc5905f701d9a03c01f8aab3c19d96e82d622e930c1dc523dd78b0a88bfc416bad8096601d254c04d0e296d0e8e1f1be5df322d31ee5af48f6e782cff5b0c58b2f96c1980c7bb8755057c866c301752bf2f1da5b4',
+        }
 
     @staticmethod
     def get_track_id_from_isrc(isrc: str) -> str:
@@ -14,7 +21,8 @@ class Deezer:
 
     @staticmethod
     def get_track_data(song_id: str) -> dict:
-        resp = requests.post('https://www.deezer.com/ajax/gw-light.php?api_version=1.0&api_token=By7mRaeO.7.UDI6~NtRjcR1whWRStYb4&input=3&method=deezer.pageTrack', data='{"sng_id":"' + song_id +'"}', cookies=Deezer._cookies)
+        #resp = requests.post('https://www.deezer.com/ajax/gw-light.php?api_version=1.0&api_token=By7mRaeO.7.UDI6~NtRjcR1whWRStYb4&input=3&method=deezer.pageTrack', data='{"sng_id":"' + song_id +'"}', cookies=Deezer._cookies)
+        resp = requests.post('https://www.deezer.com/ajax/gw-light.php?api_version=1.0&api_token=YTIQw7E4nLSiyzB7A3s0kcBa1p63TSl6&input=3&method=deezer.pageTrack', data='{"sng_id":"' + song_id +'"}', cookies=Deezer._cookies)
         track_json = resp.json()
         data = {}
         data['md5_origin'] = track_json['results']['DATA']['MD5_ORIGIN']

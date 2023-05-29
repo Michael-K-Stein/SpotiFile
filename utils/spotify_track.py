@@ -78,8 +78,13 @@ class SpotifyTrack:
     def download(self, scraper) -> bytes:
         if not self.isrc:
             raise SpotifyTrackException(f'Cannot download local file {self.title}!')
+        # I'm used to C, sorry
+        download_link = None
         try:
             download_link = self.get_download_link(scraper)
+        except Exception as ex:
+            raise SpotifyTrackException(f'Failed to get download url for {self.title} | Exception: {ex}')
+        try:
             data = Deezer.decrypt_download_data(requests.get(download_link, headers={'Accept':'*/*'}), self.isrc)
             return data
         except Exception as ex:

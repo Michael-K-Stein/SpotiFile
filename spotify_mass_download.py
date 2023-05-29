@@ -124,9 +124,12 @@ def full_download(download_dir: str, identifier: str, recursive_artist: bool=Fal
         os.makedirs(artist_images_download_dir, exist_ok=True)
         os.makedirs(f'temp', exist_ok=True)
 
+
         g_keep_saving += 1
 
         client.refresh_tokens()
+        console.log('Refreshed tokens!')
+
         console.log(f'Recieved scrape command on identifier: {identifier}, {recursive=}, {recursive_artist=}, {recursive_album=}')
         download_track_list(download_dir=download_dir, track_list=scraper.scrape_tracks(identifier, console=console), recursive=recursive, recursive_album=recursive_album, recursive_artist=recursive_artist)
 
