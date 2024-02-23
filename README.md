@@ -3,6 +3,12 @@
 *Python 3.8+*
 
 ---
+## 2024 Update: Project has been archived!
+Due to possible missuse of SpotiFile, I have decided to archive this repo. 
+The existing code will stay up - though it no longer works and is not suited to interact with Spotify's new API. 
+If you do wish to revive this project, please first review [Spotify's developers' ToS](https://developer.spotify.com/terms). 
+
+---
 
 ## Quick Start
 Make sure you have python 3.8 or above.  
